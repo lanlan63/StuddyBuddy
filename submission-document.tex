@@ -1,0 +1,590 @@
+% ============================================================
+% StudyBuddy — Sprint 3 Submission Document
+% Module: CMP-N204-0 Software Engineering (Level 5)
+% Sprint 3 — Initial Development (Week 10 Review)
+% Compile with: pdflatex or upload to Overleaf
+% ============================================================
+\documentclass[11pt,a4paper]{article}
+
+% ------- PACKAGES -------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{tocloft}
+
+% ------- COLOURS -------
+\definecolor{roehampton}{RGB}{0,51,102}
+\definecolor{accent}{RGB}{0,122,204}
+
+% ------- HYPERLINK STYLE -------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=roehampton,
+    urlcolor=accent,
+    citecolor=roehampton
+}
+
+% ------- HEADER / FOOTER -------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{roehampton}{StudyBuddy — Sprint 3}}
+\fancyhead[R]{\small\textcolor{roehampton}{CMP-N204-0}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ------- SECTION FORMATTING -------
+\titleformat{\section}{\Large\bfseries\color{roehampton}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{roehampton}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{accent}}{}{0em}{}
+
+% ============================================================
+\begin{document}
+
+% ---- TITLE PAGE ----
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    {\Huge\bfseries\textcolor{roehampton}{StudyBuddy}}\\[0.5cm]
+    {\Large\textcolor{accent}{Peer Support for Students}}\\[1cm]
+    {\LARGE\bfseries Sprint 3 — Initial Development}\\[0.3cm]
+    {\large Week 10 Code Review Submission}\\[2cm]
+
+    {\large Software Engineering — CMP-N204-0}\\[0.3cm]
+    {\large BSc Computer Science / BEng Software Engineering}\\[0.3cm]
+    {\large University of Roehampton}\\[2cm]
+
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Member} & \textbf{Student ID} \\
+        \midrule
+        Ali G       & Z23599848 \\
+        Lan G.M     & A00019111 \\
+        Nilay Oral  & Z23607537 \\
+        Maywon Ni   & Z22525705 \\
+        Tavishi L   & A00019627 \\
+        \bottomrule
+    \end{tabular}
+
+    \vfill
+
+    {\large\textbf{Submission Date:} \today}\\[0.3cm]
+    {\normalsize GitHub Repository: \url{https://github.com/YOUR-ORG/StuddyBuddy}}\\[0.2cm]
+    {\normalsize GitHub Project Board: \url{https://github.com/orgs/YOUR-ORG/projects/1}}
+
+\end{titlepage}
+
+% ---- TABLE OF CONTENTS ----
+\tableofcontents
+\newpage
+
+% ============================================================
+%  1. USER STORIES IMPLEMENTED
+% ============================================================
+\section{User Stories Implemented in Sprint 3}
+
+The following user stories were implemented during Sprint 3. These were originally defined in Sprint~2 and carried into Sprint~3 for development. All pages retrieve and display data from the MySQL database.
+
+\begin{longtable}{p{1.2cm}p{9.5cm}p{2cm}p{2cm}}
+    \toprule
+    \textbf{ID} & \textbf{User Story} & \textbf{Priority} & \textbf{Status} \\
+    \midrule
+    \endhead
+
+    US-01 & As a student, I want to \textbf{view a list of all registered users} so that I can discover potential study partners. & Must Have & \textbf{Done} \\[4pt]
+
+    US-02 & As a student, I want to \textbf{view a user's profile} with their academic level, bio, skills, and enrolled courses so I can decide if they are a good study match. & Must Have & \textbf{Done} \\[4pt]
+
+    US-03 & As a student, I want to \textbf{browse all available study sessions} so I can find one that fits my schedule and interests. & Must Have & \textbf{Done} \\[4pt]
+
+    US-04 & As a student, I want to \textbf{view detailed information about a specific study session} including topic, location, time, and participants so I can decide whether to join. & Must Have & \textbf{Done} \\[4pt]
+
+    US-05 & As a student, I want to \textbf{browse tags and categories} (skills) so I can filter and find study partners by subject area. & Must Have & \textbf{Done} \\[4pt]
+
+    \bottomrule
+    \caption{Sprint 3 — Implemented User Stories}
+\end{longtable}
+
+\subsection{Pages Implemented}
+
+Each of the five required pages was implemented by all team members in parallel, with each member maintaining their own version in \texttt{members/<Name>/app/}. The consolidated application integrates these contributions.
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lXl}
+    \toprule
+    \textbf{Page} & \textbf{Description} & \textbf{Route} \\
+    \midrule
+    Users List          & Displays all registered users from the \texttt{user} table              & \texttt{/users} \\
+    User Profile        & Shows individual user details, skills, and enrolled courses             & \texttt{/users/:id} \\
+    Sessions Listing    & Lists all study sessions with topic, location, and scheduled time       & \texttt{/sessions} \\
+    Session Detail      & Shows full session information including participants                    & \texttt{/sessions/:id} \\
+    Tags / Categories   & Displays all available skills/tags for filtering study partners          & \texttt{/tags} \\
+    \bottomrule
+\end{tabularx}
+\caption{Sprint 3 — Implemented Pages}
+\end{table}
+
+\newpage
+
+% ============================================================
+%  2. DATABASE DESIGN
+% ============================================================
+\section{Database Design}
+
+The database uses \textbf{MySQL 8} with a normalised relational schema. The schema is defined in \texttt{sd2-db.sql} and seed data is loaded from \texttt{seed-data.sql}. The database runs inside a Docker container and is accessible via phpMyAdmin at \texttt{http://localhost:8081}.
+
+\subsection{Entity-Relationship Diagram}
+
+% -------------------------------------------------------
+% INSTRUCTION: Replace the placeholder below with your ERD image.
+% Option 1: Render the Mermaid diagram from design/diagrams/edr_diagram.md
+%            and save it as an image (e.g. erd.png)
+% Option 2: Screenshot the ERD from a Mermaid renderer
+% Then uncomment the \includegraphics line and comment out the placeholder.
+% -------------------------------------------------------
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=\textwidth]{images/erd.png}
+%     \caption{Entity-Relationship Diagram — StudyBuddy Database}
+% \end{figure}
+
+\textbf{(INSERT ERD DIAGRAM IMAGE HERE)}
+
+\textit{The ERD source is defined in} \texttt{design/diagrams/edr\_diagram.md} \textit{using Mermaid notation.}
+
+\subsection{Core Tables}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Table} & \textbf{Purpose} \\
+    \midrule
+    \texttt{university}            & Stores university names and locations \\
+    \texttt{department}            & Academic departments within each university \\
+    \texttt{user}                  & Registered users with name, email, password hash, academic level, and bio \\
+    \texttt{course}                & Courses offered by departments (code and name) \\
+    \texttt{enrollment}            & Links users to courses with semester and year (many-to-many) \\
+    \texttt{skill}                 & Global taxonomy of skills (JavaScript, MySQL, Docker, etc.) \\
+    \texttt{user\_skill}           & Maps users to skills with proficiency level \\
+    \texttt{study\_session}        & Study sessions with topic, location, time, and max participants \\
+    \texttt{session\_participant}   & Users who have joined a study session \\
+    \texttt{project}               & Collaborative projects linked to courses \\
+    \texttt{project\_member}       & Users assigned to projects with roles \\
+    \texttt{follow}                & Social follow relationships between users \\
+    \texttt{post} / \texttt{media} / \texttt{comment} / \texttt{post\_like} & Social feed (posts, media, comments, likes) \\
+    \texttt{conversation} / \texttt{message} & Direct and group messaging system \\
+    \bottomrule
+\end{tabularx}
+\caption{Database Tables Overview}
+\end{table}
+
+\subsection{Key Relationships}
+
+\begin{itemize}[nosep]
+    \item Each \textbf{user} belongs to one \textbf{university} and one \textbf{department}
+    \item Users enrol in \textbf{courses} via the \texttt{enrollment} junction table
+    \item Users have multiple \textbf{skills} via the \texttt{user\_skill} junction table
+    \item \textbf{Study sessions} are created by a user and joined by others via \texttt{session\_participant}
+    \item The schema supports future Sprint~4 features: messaging, social posts, and following
+\end{itemize}
+
+\subsection{Seed Data}
+
+The \texttt{seed-data.sql} file populates the database with demo data for Sprint~3:
+\begin{itemize}[nosep]
+    \item 2 universities, 3 departments
+    \item 5 users (one per team member)
+    \item 7 skills, 3 courses, 8 enrolments
+    \item 5 study sessions with participant assignments
+\end{itemize}
+
+\newpage
+
+% ============================================================
+%  3. TASK BREAKDOWN & DEVELOPER ALLOCATION
+% ============================================================
+\section{Task Breakdown \& Developer Allocation}
+
+Tasks were managed using the GitHub Projects Kanban board. The following table shows the Sprint~3 task allocation.
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{Xlll}
+    \toprule
+    \textbf{Task} & \textbf{Assigned To} & \textbf{Status} & \textbf{Card \#} \\
+    \midrule
+    Database schema design (\texttt{sd2-db.sql})          & Ali       & Done & — \\
+    Seed data creation (\texttt{seed-data.sql})            & Ali       & Done & — \\
+    Users list page (\texttt{users.pug})                   & All       & Done & — \\
+    User profile page (\texttt{profile.pug})               & All       & Done & — \\
+    Study sessions listing page (\texttt{sessions.pug})    & All       & Done & — \\
+    Session detail page (\texttt{session-detail.pug})      & All       & Done & — \\
+    Tags / categories page (\texttt{tags.pug})             & All       & Done & — \\
+    Express routes and DB service layer                    & All       & Done & — \\
+    Layout template (\texttt{layout.pug})                  & All       & Done & — \\
+    Docker environment maintenance                         & Ali       & Done & — \\
+    Meeting facilitation and records                       & Lan       & Done & — \\
+    Sprint 3 PDF compilation                               & —         & In Progress & — \\
+    \bottomrule
+\end{tabularx}
+\caption{Sprint 3 Task Breakdown}
+\end{table}
+
+\textit{Note: ``All'' indicates that each team member implemented their own version of the page in their \texttt{members/<Name>/} folder, demonstrating individual contribution.}
+
+\begin{itemize}[nosep]
+    \item \textbf{Ali} — \texttt{members/Ali/app/} — Users, Profile, Sessions, Session Detail, Tags, 404 page
+    \item \textbf{Lan} — \texttt{members/Lan/app/} — Users, Profile, Sessions, Session Detail, Tags
+    \item \textbf{Maywon} — \texttt{members/Maywon/app/} — Users, Profile, Sessions, Session Detail, Tags
+    \item \textbf{Nilay} — \texttt{members/Nilay/app/} — Users, Profile, Sessions, Session Detail, Tags
+    \item \textbf{Tavishi} — \texttt{members/Tavishi/app/} — Users, Profile, Sessions, Session Detail, Tags
+\end{itemize}
+
+\newpage
+
+% ============================================================
+%  4. GITHUB LINKS
+% ============================================================
+\section{GitHub Repository \& Project Links}
+
+\begin{itemize}[nosep]
+    \item \textbf{GitHub Repository:} \url{https://github.com/YOUR-ORG/StuddyBuddy}
+    \item \textbf{GitHub Project (Kanban Board):} \url{https://github.com/orgs/YOUR-ORG/projects/1}
+\end{itemize}
+
+\textit{(Replace the placeholder URLs above with your actual GitHub links before compiling.)}
+
+\newpage
+
+% ============================================================
+%  5. GITHUB METRICS
+% ============================================================
+\section{GitHub Metrics — Team Participation}
+
+The screenshot below demonstrates that all five team members have made code contributions to the repository.
+
+% -------------------------------------------------------
+% INSTRUCTION: Take a screenshot from GitHub → Insights → Contributors
+% Save it as images/github-metrics.png and uncomment below.
+% -------------------------------------------------------
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=\textwidth]{images/github-metrics.png}
+%     \caption{GitHub Contribution Metrics — All Team Members Participating}
+% \end{figure}
+
+\textbf{(INSERT GITHUB CONTRIBUTIONS GRAPH SCREENSHOT HERE)}
+
+\textit{Navigate to: GitHub Repository} $\rightarrow$ \textit{Insights} $\rightarrow$ \textit{Contributors}
+
+All team members have contributed code:
+\begin{itemize}[nosep]
+    \item \textbf{Ali (Z23599848)} — Database schema, seed data, Express routes, Docker configuration, view templates
+    \item \textbf{Lan (A00019111)} — View templates, wireframes, meeting records, colour schemes
+    \item \textbf{Nilay (Z23607537)} — View templates, use case diagram, activity diagrams
+    \item \textbf{Maywon (Z22525705)} — View templates, user stories
+    \item \textbf{Tavishi (A00019627)} — View templates, class diagram, project management
+\end{itemize}
+
+\newpage
+
+% ============================================================
+%  6. KANBAN BOARD
+% ============================================================
+\section{Kanban Board Screenshot}
+
+The screenshot below shows the current state of the GitHub Projects Kanban board with Sprint~3 tasks.
+
+% -------------------------------------------------------
+% INSTRUCTION: Take a screenshot of your GitHub Projects board
+% Save it as images/kanban-sprint3.png and uncomment below.
+% -------------------------------------------------------
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=\textwidth]{images/kanban-sprint3.png}
+%     \caption{Kanban Board — Sprint 3 Task Status}
+% \end{figure}
+
+\textbf{(INSERT KANBAN BOARD SCREENSHOT HERE)}
+
+\textit{Navigate to: GitHub} $\rightarrow$ \textit{Projects} $\rightarrow$ \textit{Your Project Board}
+
+\newpage
+
+% ============================================================
+%  7. MEETING RECORDS
+% ============================================================
+\section{Meeting Records}
+
+Meeting records have been maintained throughout the project. All minutes are stored in the \texttt{meetings/} directory of the repository.
+
+% ---- MEETING 1 ----
+\subsection{Meeting 1 — 23 January 2026}
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Field} & \textbf{Detail} \\
+    \midrule
+    Date \& Time    & 23/01/2026, 1:50 PM \\
+    Goal            & Agree code of conduct, group name, choose project \\
+    Facilitator     & Lan \\
+    Note Taker      & Lan \\
+    Attendees       & Ali, Nilay, Lan, Maywon \\
+    \midrule
+    Discussion      & Group members / group name; Code of conduct; GitHub repository \\
+    Actions         & Group name decided (all); Code of conduct created (all); Project choice discussed (all) \\
+    \bottomrule
+\end{tabularx}
+\end{table}
+
+% ---- MEETING 2 ----
+\subsection{Meeting 2 — 30 January 2026}
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Field} & \textbf{Detail} \\
+    \midrule
+    Date \& Time    & 30/01/2026, 1:10 PM \\
+    Goal            & Sprint 1 discussion, choose project \\
+    Facilitator     & Lan \\
+    Note Taker      & Lan \\
+    Attendees       & Ali, Nilay, Lan, Maywon, Tavishi \\
+    \midrule
+    Updates         & New group member added (Tavishi) \\
+    Discussion      & Project selection; Sprint 1 requirements \\
+    Actions         & Project Management (Tavishi); Scaffolding (Ali); Personas (Maywon); Ethics (Nilay); Meetings (Lan) \\
+    \bottomrule
+\end{tabularx}
+\end{table}
+
+% ---- MEETING 3 ----
+\subsection{Meeting 3 — 6 February 2026}
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Field} & \textbf{Detail} \\
+    \midrule
+    Date \& Time    & 06/02/2026, 2:00 PM \\
+    Goal            & Finish Sprint 1 \\
+    Facilitator     & Lan \\
+    Note Taker      & Lan \\
+    Attendees       & Ali, Nilay, Lan, Maywon, Tavishi \\
+    \midrule
+    Updates         & Personas done; Ethical issues done; Meetings up to date; Kanban in progress; Project scaffolding in progress \\
+    Discussion      & Teams meeting to compile PDF; Review of previous tasks \\
+    Actions         & Attend Teams meeting and submit Sprint 1 \\
+    \bottomrule
+\end{tabularx}
+\end{table}
+
+% ---- MEETING 4 ----
+\subsection{Meeting 4 — 9 February 2026}
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Field} & \textbf{Detail} \\
+    \midrule
+    Date \& Time    & 09/02/2026, 5:00 PM \\
+    Goal            & Finalise Sprint 1 submission \\
+    Facilitator     & Lan \\
+    Note Taker      & Lan \\
+    Attendees       & Ali, Nilay, Lan, Maywon \\
+    \midrule
+    Updates         & Project scaffolding done; PDF updated \\
+    Discussion      & Kanban board to be done during meeting; GitHub organisation \\
+    Actions         & Submit PDF (Lan) \\
+    \bottomrule
+\end{tabularx}
+\end{table}
+
+% ---- MEETING 5 ----
+\subsection{Meeting 5 — 17 February 2026}
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Field} & \textbf{Detail} \\
+    \midrule
+    Date \& Time    & 17/02/2026, 7:30 PM \\
+    Goal            & Assign Sprint 2 tasks \\
+    Facilitator     & Lan \\
+    Note Taker      & Lan \\
+    Attendees       & Ali, Nilay, Lan, Maywon, Tavishi \\
+    \midrule
+    Updates         & Wireframe started; README updated; Code of conduct updated \\
+    Discussion      & Assign Sprint 2 requirements; StudyBuddy concept developed further \\
+    Actions         & Use case diagram (Nilay); User stories (Maywon); Wireframes (Lan); Activity diagrams (Nilay); Sequence diagrams (Ali); ERD (Ali); Class diagram (Tavishi); Designs/colours (Lan); Sprint 3 Kanban tickets (Tavishi); Kanban screenshot (Lan); Lab work (all); Meetings (Lan) \\
+    \bottomrule
+\end{tabularx}
+\end{table}
+
+% ---- MEETING 6 ----
+\subsection{Meeting 6 — 20 February 2026}
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Field} & \textbf{Detail} \\
+    \midrule
+    Date \& Time    & 20/02/2026, 1:00 PM \\
+    Goal            & Review Sprint 2 tasks and continue finishing \\
+    Facilitator     & Lan \\
+    Note Taker      & Lan \\
+    Attendees       & Ali, Nilay, Lan, Maywon \\
+    \midrule
+    Updates         & Use case diagram complete; User stories complete; Kanban updated; Colour schemes complete \\
+    Discussion      & Lab work; Sprint 2 demo date TBD \\
+    Actions         & Complete all assigned Sprint 2 tasks (all) \\
+    \bottomrule
+\end{tabularx}
+\end{table}
+
+% ---- MEETING 7 ----
+\subsection{Meeting 7 — 27 February 2026}
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+    \toprule
+    \textbf{Field} & \textbf{Detail} \\
+    \midrule
+    Date \& Time    & 27/02/2026, 12:50 PM \\
+    Goal            & Plan tasks for Sprint 3 \\
+    Facilitator     & Lan \\
+    Note Taker      & Lan \\
+    Attendees       & Ali, Nilay, Lan, Maywon, Tavishi \\
+    \midrule
+    Discussion      & Sprint 2 demo; Revision of diagrams \\
+    Actions         & Revise Sprint 2 diagrams (all) \\
+    \bottomrule
+\end{tabularx}
+\end{table}
+
+% ---- ADDITIONAL MEETINGS ----
+% Uncomment and fill in if you have Sprint 3 development meetings (M8, M9, etc.)
+%
+% \subsection{Meeting 8 — DD/MM/2026}
+% \begin{table}[H]
+% \centering
+% \begin{tabularx}{\textwidth}{lX}
+%     \toprule
+%     \textbf{Field} & \textbf{Detail} \\
+%     \midrule
+%     Date \& Time    & \\
+%     Goal            & \\
+%     Facilitator     & \\
+%     Note Taker      & \\
+%     Attendees       & \\
+%     \midrule
+%     Discussion      & \\
+%     Actions         & \\
+%     \bottomrule
+% \end{tabularx}
+% \end{table}
+
+\newpage
+
+% ============================================================
+%  AI DECLARATION
+% ============================================================
+\section{AI Declaration}
+
+In accordance with the module guidelines, we declare the following use of Artificial Intelligence tools during Sprint~3:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lXX}
+    \toprule
+    \textbf{Tool} & \textbf{Purpose} & \textbf{Scope of Use} \\
+    \midrule
+    GitHub Copilot  & Code suggestions and autocompletion              & Boilerplate code assistance; all suggestions reviewed and understood \\
+    ChatGPT / Claude & Bug debugging, code explanation                  & Explaining error messages and suggesting fixes; no complete features generated \\
+    \bottomrule
+\end{tabularx}
+\caption{AI Usage Declaration}
+\end{table}
+
+\textbf{Statement:} No complete features were generated by AI. All submitted code can be fully explained by the respective team member who wrote it. AI was used only for improving code quality, debugging assistance, and brainstorming support.
+
+\newpage
+
+% ============================================================
+%  APPENDIX
+% ============================================================
+\appendix
+\section{Appendix — Application Screenshots}
+
+\textit{The following screenshots demonstrate the five required pages running in the browser with data from the MySQL database.}
+
+\subsection{A.1 — Users List Page}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/page-users.png}
+%     \caption{Users List Page — \texttt{/users}}
+% \end{figure}
+
+\textbf{(INSERT SCREENSHOT OF USERS LIST PAGE)}
+
+\subsection{A.2 — User Profile Page}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/page-profile.png}
+%     \caption{User Profile Page — \texttt{/users/:id}}
+% \end{figure}
+
+\textbf{(INSERT SCREENSHOT OF USER PROFILE PAGE)}
+
+\subsection{A.3 — Study Sessions Listing Page}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/page-sessions.png}
+%     \caption{Study Sessions Listing — \texttt{/sessions}}
+% \end{figure}
+
+\textbf{(INSERT SCREENSHOT OF SESSIONS LISTING PAGE)}
+
+\subsection{A.4 — Session Detail Page}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/page-session-detail.png}
+%     \caption{Session Detail Page — \texttt{/sessions/:id}}
+% \end{figure}
+
+\textbf{(INSERT SCREENSHOT OF SESSION DETAIL PAGE)}
+
+\subsection{A.5 — Tags / Categories Page}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{images/page-tags.png}
+%     \caption{Tags / Categories Page — \texttt{/tags}}
+% \end{figure}
+
+\textbf{(INSERT SCREENSHOT OF TAGS PAGE)}
+
+\end{document}

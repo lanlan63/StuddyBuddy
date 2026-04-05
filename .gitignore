@@ -1,0 +1,7 @@
+node_modules/
+.env
+db/
+*.log
+.DS_Store
+overleaf-sprint3.zip
+overleaf-sprint3/
