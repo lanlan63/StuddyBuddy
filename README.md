@@ -1,12 +1,44 @@
-# Studdy Buddy
+# StudyBuddy
 
 ## Project Overview
-Studdy buddy is a group software engineering project designed to support university students in organising their study activities, connecting with peers, and improving collaboration and wellbeing.
+StudyBuddy is a group software engineering project designed to support university students in organising their study activities, connecting with peers, and improving collaboration and wellbeing.
 
 ## Project Status
-This project has completed Sprint 3 database-driven browsing pages and is being prepared for Sprint 4 MVP completion.
+This project has completed the Sprint 4 MVC implementation. The app now includes the Sprint 3 database-driven browsing pages plus authentication, profile editing, availability, matching, study requests, messaging, ratings, Docker support, and GitHub Actions CI.
 
-Sprint 4 should focus on authentication, profile editing, availability, matching, study requests, messaging, ratings, Docker evidence, and GitHub Actions evidence. See `sprint4-notes.md` for the current Sprint 4 checklist.
+See `sprint4-notes.md` for the Sprint 4 evidence checklist and implementation summary.
+
+## Sprint 4 Features
+
+| Feature | Status |
+| --- | --- |
+| Real GitHub Actions CI | Done |
+| Docker working with MySQL and seed import | Done |
+| Dependency/security cleanup | Done |
+| Sprint 3 route bugs fixed | Done |
+| US1 Registration | Done |
+| US2 Login | Done |
+| US22 Logout | Done |
+| US3 Input validation | Done |
+| US4/US5 Profile create/update | Done |
+| US6 Availability | Done |
+| Basic matching algorithm | Done |
+| US10-US13 Study requests | Done |
+| US14 Messaging | Done |
+| Ratings/points | Done |
+
+## Current Application Routes
+
+- `/` - home page
+- `/register` - account registration
+- `/login` - account login
+- `/profile` and `/profile/edit` - current user profile and edit form
+- `/users` and `/users/:id` - browse students and view profiles
+- `/matches` - ranked study buddy matches
+- `/requests` - incoming and outgoing study requests
+- `/messages` and `/messages/:id` - accepted-buddy conversations
+- `/sessions` and `/sessions/:id` - study session list, detail, and ratings
+- `/tags` - topic browsing
 
 ## Technologies
 - Node.js
@@ -25,6 +57,24 @@ Before running Docker Compose locally, copy `env-sample` to `.env` and keep `.en
 docker compose up --build
 ```
 
+The app runs at `http://127.0.0.1:3000/`.
+PhpMyAdmin runs at `http://127.0.0.1:8081/`.
+
+Seeded demo users can log in with password `password123`, for example:
+
+- `ali@uni.ac.uk`
+- `nilay@uni.ac.uk`
+- `lan@uni.ac.uk`
+- `maywon@uni.ac.uk`
+- `tavishi@uni.ac.uk`
+
+## Local Checks
+
+```bash
+npm test
+npm audit --omit=dev
+```
+
 ## Repository
 This repository is used for group collaboration, version control, and sprint-based development.
 
@@ -32,7 +82,7 @@ This repository is used for group collaboration, version control, and sprint-bas
 
 Sprint 4 CI evidence is provided through `.github/workflows/ci.yml`.
 
-The workflow runs JavaScript syntax checks with `npm test` and verifies that the web image can be built with Docker.
+The workflow runs JavaScript syntax checks with `npm test`, checks production dependency security with `npm audit --omit=dev`, and verifies that the web image can be built with Docker.
 
 ---
 
@@ -92,25 +142,27 @@ on decision points and validation logic rather than system behaviour.
 - **Kanban Screenshot (Sprint evidence):** `docs/sprint2/screenshots/kanban-sprint2.png`
 
 ### Project Management
-- **GitHub Project / Kanban Board:** (paste your GitHub Projects link here)
-- **Repository Link:** (paste repo link here)
+- **GitHub Project / Kanban Board:** Add the team board link here for the final report.
+- **Repository Link:** `https://github.com/Z23599848/StuddyBuddy`
 
 ---
 
-## Scope (Sprint 2 → Sprint 3 Implementation Plan)
+## Scope (Sprint 2 to Sprint 4 Implementation)
 
-### MVP (Sprint 3 target)
-The Minimum Viable Product (MVP) will enable:
+### MVP Delivered
+The Minimum Viable Product (MVP) enables:
 1. Student registration and login
 2. Creation of a basic study profile (subject, availability, study preferences)
 3. Searching for study buddies based on compatibility criteria
 4. Sending and responding to study requests (accept/reject)
+5. Messaging accepted study buddies
+6. Rating completed study sessions
 
-### Out of Scope (for now)
-To maintain quality over quantity in early sprints, the following are intentionally out of scope until core features are stable:
-- Real-time chat and messaging
+### Out of Scope
+To maintain quality and a realistic Sprint 4 scope, the following remain out of scope:
+- Real-time WebSocket chat
 - Notifications and email verification
-- Advanced matching algorithms (ML-based recommendations)
+- Advanced ML-based matching
 - Admin dashboard and moderation tooling
 
 ### Non-Functional Requirements (NFRs)
@@ -138,6 +190,7 @@ src/
 app/
 docker-compose.yml
 README.md
+```
 
 Design & Analysis (Sprint 2)
 
